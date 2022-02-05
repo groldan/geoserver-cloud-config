@@ -45,7 +45,13 @@ geotools:
 
 gwc:
   enabled: true
-  cache-directory: ${GEOWEBCACHE_CACHE_DIR:${geoserver.backend.data-directory.location}/gwc}
+  # cache-directory is mandatory, there's no default value like in upstream GeoServer,
+  # it can be set to the datadir's /gwc with ${geoserver.backend.data-directory.location}/gwc
+  # if using the data-directory catalog backend, but in general it's better to separate config,
+  # from data, hence the webui and gwc Docker images are prepared for a shared volume at /data/geowebcache
+  cache-directory: ${GEOWEBCACHE_CACHE_DIR:/data/geowebcache}
+  # directory where geowebcache.xml is located, if unset defaults to the resource store's /gwc directory usual in GeoServer
+  config-directory: ${GEOWEBCACHE_CONFIG_DIR:}
   rest-config: true
   web-ui: true
   services:

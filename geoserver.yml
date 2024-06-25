@@ -5,8 +5,10 @@ spring.config.import:
  - geoserver_spring.yml
  - optional:geoserver_logging.yml
  - jndi.yml
+ - observability.yml
 
 spring:
+  jmx.enabled: false
   # cache implementation to use if `geoserver.backend.caching.enabled: true`
   cache:
     type: caffeine

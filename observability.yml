@@ -1,0 +1,25 @@
+otel:
+  sdk:
+    # set to true to completely disable opentelemetry instrumentation
+    disabled: false
+  metric.export.interval: 10000
+  traces:
+    exporter: console
+  metrics:
+    exporter: console
+  logs:
+    exporter: console
+  instrumentation:
+    common:
+      enduser:
+        id.enabled: true
+        role.enabled: true
+        scope.enabled: true
+    logback-appender:
+      enabled: true
+      experimental-log-attributes: true
+      experimental:
+        capture-mdc-attributes:
+        - "*"
+
+logging.level.io.opentelemetry: debug

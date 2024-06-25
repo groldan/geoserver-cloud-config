@@ -17,6 +17,9 @@ geoserver:
        # make sure the same config is applied in geoserver.yml
        enabled: ${gateway.shared-auth:true}
 
+spring.config.import:
+ - observability.yml
+
 basepath: ${geoserver.base-path}
 # by default, assumes a discovery-client is in use, and perform client-side load balancing on
 # the advertised instances. See the 'standalone' profile notes for a static config 
@@ -40,6 +43,7 @@ server:
     enabled: true
 
 spring:
+  jmx.enabled: false
   cloud:
     gateway:
       enabled: true

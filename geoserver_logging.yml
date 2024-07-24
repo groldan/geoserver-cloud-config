@@ -13,7 +13,9 @@ spring:
         - "logging_debug_acl"
         - "logging_debug_security"
 logging:
-  logging.pattern.level: "trace_id=%mdc{trace_id} span_id=%mdc{span_id} trace_flags=%mdc{trace_flags} %5p"
+  #pattern.level: "trace_id=%mdc{trace_id} span_id=%mdc{span_id} trace_flags=%mdc{trace_flags} %5p"
+  #pattern.level: "trace_id=%mdc{trace_id} span_id=%mdc{span_id} trace_flags=%mdc{trace_flags} %5p"
+  #pattern.level: ${spring.application.name:} %mdc{trace_id:-} %mdc{span_id:-} %5p
   level:
     root: warn
     org.springframework: warn

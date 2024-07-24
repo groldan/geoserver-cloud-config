@@ -1,12 +1,12 @@
 otel:
   sdk:
     # set to true to completely disable opentelemetry instrumentation
-    disabled: false
-  metric.export.interval: 10000
+    disabled: true
+  metric.export.interval: 1000
   traces:
     exporter: console
   metrics:
-    exporter: console
+    exporter: none
   logs:
     exporter: console
   instrumentation:

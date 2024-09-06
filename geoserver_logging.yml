@@ -1,6 +1,5 @@
 # Logging profiles for GeoServer applications
 
-# default profile:
 spring:
   profiles:
     group:
@@ -12,7 +11,18 @@ spring:
         - "logging_debug_cache"
         - "logging_debug_acl"
         - "logging_debug_security"
+
+# default profile:
 logging:
+  # control behavior of the org.geoserver.cloud.accesslog logging topic
+  accesslog:
+    enabled: true
+    include:
+    - .*
+    exclude:
+    - .*/actuator/health.*
+    - .*\.(png|svg)$
+    - .*(/web/wicket/resource/).*
   # GeoServer Cloud specificconfiguration to inject auth, application, http request, and geoserver ows request
   # attributes to the logging MDC. The following are default values. The MDC attributes will be automatically
   # including when using the json-logs profile. For the regular console output you could tweak the logback-spring.xml
@@ -20,13 +30,13 @@ logging:
   mdc:
     include:
       user:
-        id: false
+        id: true
         roles: false
       application:
         name: true
         version: true
         instance-id: true
-        active-profiles: true
+        active-profiles: false
       http:
         id: true
         method: true
@@ -82,11 +92,13 @@ logging:
     org.geoserver.cloud: info
     org.geoserver.cloud.autoconfigure: info
     org.geoserver.cloud.config.factory: info
+    org.geoserver.cloud.accesslog: debug
     # bus debugging
     org.geoserver.cloud.event: info
     org.geoserver.cloud.event.bus: info
     org.springframework.cloud.bus.BusAutoConfiguration: info
     org.springframework.cloud.bus.DefaultBusPathMatcher: info
+    com.netflix.discovery.DiscoveryClient: warn
 ---
 spring.config.activate.on-profile: logging_debug
 logging:

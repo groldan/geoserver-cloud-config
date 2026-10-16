@@ -1,71 +1,10 @@
-# Logging profiles for GeoServer applications
-
-spring:
-  profiles:
-    group:
-      debug:
-        - "logging_debug"
-        - "logging_debug_access"
-        - "logging_debug_catalog"
-        - "logging_debug_locks"
-        - "logging_debug_events"
-        - "logging_debug_cache"
-        - "logging_debug_acl"
-        - "logging_debug_security"
-        - "logging_debug_controlflow"
+# Logging configuration of the GeoServer services.
+# The access log and the MDC attributes are configured in common_logging.yml.
+# The Spring profiles below, like logging_debug_catalog, raise the levels of one part of GeoServer
+# at startup. Add them to the active profiles of a service to use them.
 
 # default profile:
 logging:
-  # Control behavior of the org.geoserver.cloud.accesslog logging topic. When enabled, the request logs will include the URI's that match
-  # the following regular expressions at the specified level. The defafult level is info (see logging.level.org.geoserver.cloud.accesslog below)
-  # Additionally, if the json-logs spring profile is enabled, the log entries will include MDC attributes configured in the logging.mdc.include.* properties below
-  accesslog:
-    enabled: true
-    # A list of java regular expressions applied to the request URL for logging at info level
-    # The default behavior is to log all requests to the REST API
-    info:
-    - .*\/(rest|gwc\/rest)(\/.*|\?.*)?$
-    # A list of java regular expressions applied to the request URL for logging at debug level
-    # The default behavior is to log OWS requests
-    debug:
-    - .*\/(ows|ogc|wms|wfs|wcs|wps)(\/.*|\?.*)?$
-    # A list of java regular expressions applied to the request URL for logging at trace level
-    # The default behavior is to EXCLUDE only webui's static resources and known image extensions
-    trace:
-    - ^(?!.*\/web\/wicket\/resource\/)(?!.*\.(png|jpg|jpeg|gif|svg|webp|ico)(\\?.*)?$).*$
-
-  # GeoServer Cloud specific configuration to inject auth, application, http request, and geoserver ows request
-  # attributes to the logging MDC. The following are default values. The MDC attributes will be automatically
-  # included when using the json-logs profile. For the regular console output you could tweak the logback-spring.xml
-  # config file to include the required MDC properties
-  mdc:
-    include:
-      user:
-        id: true
-        roles: false
-      application:
-        name: true
-        version: true
-        instance-id: true
-        active-profiles: false
-      http:
-        id: true
-        method: true
-        url: true
-        query-string: false
-        parameters: false
-        headers: false
-        headers-pattern: ".*"
-        cookies: false
-        remote-addr: false
-        remote-host: false
-        session-id: false
-      geoserver:
-        ows:
-          service-name: true
-          service-version: true
-          service-format: true
-          operation-name: true
   level:
     root: warn
     org.springframework: warn
@@ -104,12 +43,35 @@ logging:
     org.geoserver.cloud.autoconfigure: info
     org.geoserver.cloud.autoconfigure.extensions: info
     org.geoserver.cloud.config.factory: info
-    org.geoserver.cloud.accesslog: info
     # bus debugging
     org.geoserver.cloud.event: info
     org.geoserver.cloud.event.bus: info
     org.springframework.cloud.bus.BusAutoConfiguration: info
     org.springframework.cloud.bus.DefaultBusPathMatcher: info
+
+# Logging profiles, selected while the services run, in the web UI (Settings > Global > Logging Settings)
+# or through the REST API (/rest/logging). A profile sets the levels of its loggers and of their descendants,
+# on top of the levels above. DEFAULT_LOGGING is always defined and keeps the levels above.
+geoserver:
+  logging:
+    profiles:
+      PRODUCTION_LOGGING:
+        org.geoserver: warn
+        org.vfny.geoserver: warn
+        org.geotools: warn
+        org.geowebcache: error
+        org.springframework: error
+      VERBOSE_LOGGING:
+        org.geoserver: trace
+        org.vfny.geoserver: trace
+        org.geotools: trace
+      GEOSERVER_DEVELOPER_LOGGING:
+        org.geoserver: trace
+        org.vfny.geoserver: trace
+      GEOTOOLS_DEVELOPER_LOGGING:
+        org.geotools: trace
+      QUIET_LOGGING:
+        root: "off"
 ---
 spring.config.activate.on-profile: logging_debug
 logging:

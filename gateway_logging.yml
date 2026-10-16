@@ -1,0 +1,24 @@
+# Logging configuration of the gateway.
+# The access log and the MDC attributes are configured in common_logging.yml.
+
+logging:
+  level:
+    root: warn
+    org.springframework: warn
+    '[org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker]': error
+    org.geoserver.cloud: info
+
+# Regular expression matching the addresses of the proxies allowed to set the request id of the logs, with the
+# X-Request-ID, http.request.id, or trace-id request headers. The gateway ignores these headers from other clients,
+# and creates its own id. Unset by default: the gateway trusts no proxy.
+#geoserver.gateway.request-id.trusted-proxies: 10\.0\.0\.\d+
+---
+spring.config.activate.on-profile: debug
+logging:
+  level:
+    root: debug
+---
+spring.config.activate.on-profile: logging_debug_security
+logging:
+  level:
+    org.geoserver.cloud.security.gateway.sharedauth: debug
